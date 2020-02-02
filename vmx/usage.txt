@@ -1,0 +1,37 @@
+
+'base.cfg' is a bootstrap config to be applied from the console after initial VM build from a base JUNOS image.
+It configures an interface on 192.168.122.100, a root password and super user with ssh key.
+The second stage is to use ssh/scp to copy a working full configuration to /config/juniper.conf.gz.
+
+A full bootstrap script looks lie this:
+
+ $  cp ./vmx/images/junos-vmx-x86-64-18.2R1.9.qcow2 junos.qcow2
+ $  virt-install --os-variant freebsd12.0 --noautoconsole --import --disk junos.qcow2 --name junos --memory 4096 && virsh console junos
+
+This creates a clean junos image.  To apply the base configuration login as root (no password required).
+Then go to configuration mode ( -> cli ; -> configure ).
+Then paste the contents of base.cfg.  The last line in base.cfg is 'commit' - this brings up the network interface for ssh/scp access.
+Now scp the gzipped configuration file to /config/juniper.conf.gz.  Note: this 2nd configuration file format is native '{}' style, not 'set .....' style.
+
+Altentively, save a copy of the base image and reuse it for creating multiple clones:
+ $  cp junos.qcow2 base.qcow2
+
+Now, create new instances more simply with:
+ $ cp base.qcow2 junos1.qcow2
+ $ virsh start junos1
+ $ gzip -k junos1.conf
+ $ scp junos1.conf.gz /config/juniper.conf.gz
+ $ virsh console junos1
+ > shutdown -r -f now
+
+Running instances can be shut down by:
+ $ virsh console junos1
+ > shutdown -f now
+ [ CTL-@ ]
+ $  virsh destroy junos1
+And restarted and monitored as boot progresses with:
+
+ $ virsh start junos1 && virsh console junos1
+
+Note: avoid using JUNOS CLI command 'request system reboot' - this leaves the image in an inoperable state (key daemons do not restart).
+
