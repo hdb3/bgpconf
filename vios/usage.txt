@@ -4,3 +4,5 @@ Convert VMWare images to plain qcow2 using 'qemu-img' utility:
  $ qemu-img convert -f vmdk -O qcow2 vios-adventerprisek9-m.vmdk.SPA.157-3.M3 vios-adventerprisek9-m.SPA.157-3.M3.qcow2
 
 Run this image under KVM as a generic OS: 
+  $ virt-install --os-variant freebsd12.0 --noautoconsole --import --disk ios.qcow2 --name ios --memory 4096
+ $ virt-install --os-variant freebsd12.0 --noautoconsole --import --disk ios.qcow2 --name ios --memory 4096 --network network=default,model=e1000 --network network=default2,model=e1000 && virsh console ios
