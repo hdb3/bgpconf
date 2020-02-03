@@ -1,0 +1,14 @@
+
+For VMWare workstation a workaround is required to access console ports on e.g. Cisco IOSv and IOSXRv.
+In VMWare workstation an optional serial port should be configured whilst the VM is off.
+The serial port is configured as a named pipe with the drop down options 'From: Server --- To: An Appplication'.
+THis should result in a socket being created at boot time, e.g. /tmp/tty.
+Use 'socat' and 'telnet' to establish a console, i.e.
+ $ socat  /tmp/tty tcp-listen:9999
+and in another session
+ $ telnet localhost 9999
+For the initial password excahnge the CR/NL munging in telnet LINEMODE prevent a working login.
+The solution I used is to set mode=character in telnet and be sure to use CTRL-J as the RETURN key.
+For the IOSXRv images the default username/password is cisco/cisco.
+The correct OS choice is not known - FreeBSD results in no network interfaces being detected for ISOXRv.
+Note generally that the network interfaces are not known to be working under VMW ws 15.  The is a work-in-progress.
