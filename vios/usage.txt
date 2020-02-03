@@ -1,0 +1,6 @@
+
+Cisco VMWAre vios images are labelled like "vios-adventerprisek9-m.vmdk.SPA.157-3.M3".
+Convert VMWare images to plain qcow2 using 'qemu-img' utility:
+ $ qemu-img convert -f vmdk -O qcow2 vios-adventerprisek9-m.vmdk.SPA.157-3.M3 vios-adventerprisek9-m.SPA.157-3.M3.qcow2
+
+Run this image under KVM as a generic OS: 
