@@ -34,4 +34,5 @@ And restarted and monitored as boot progresses with:
  $ virsh start junos1 && virsh console junos1
 
 Note: avoid using JUNOS CLI command 'request system reboot' - this leaves the image in an inoperable state (key daemons do not restart).
+Safe shutdown can be done with the FreeBSD CLI, accessed using the 'root' login, e.g. $ "ssh root@junos shutdown -f now", followed by "virsh destroy junos"
 

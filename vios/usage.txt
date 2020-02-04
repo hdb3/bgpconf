@@ -6,3 +6,12 @@ Convert VMWare images to plain qcow2 using 'qemu-img' utility:
 Run this image under KVM as a generic OS: 
   $ virt-install --os-variant freebsd12.0 --noautoconsole --import --disk ios.qcow2 --name ios --memory 4096
  $ virt-install --os-variant freebsd12.0 --noautoconsole --import --disk ios.qcow2 --name ios --memory 4096 --network network=default,model=e1000 --network network=default2,model=e1000 && virsh console ios
+
+The file 'vios/base.cfg' contains a complete script to configure the new IOS instance for ssh/scp access and thereby custom configuration.
+The localised content of this file is the valid local IP address, and ssh/rsa pubkey and user.
+Note: the public key is simply the entire linux/openSSH pub key, split over multiple lines.  For the lazy, 'fold -b -w 72 ~/.ssh/id_rsa.pub' can be used to recreate a valid key.
+The file 'vios1.cfg' is a template or single instance completion for an active BGP, ADD-PATH / BMP capable, instance.
+Customise as required and paste into the configuration mode of the running base instance via console or ssh.
+The file 'vios1.startup-config' is a merged configuration file based on 'vios1.cfg' and 'base.cfg', ready for use as a replacement startup-config
+Customise as required and SSH copy to the base IP address:
+$ scp bgpconf/vios/vios1.startup-config 192.168.122.100:startup-config
