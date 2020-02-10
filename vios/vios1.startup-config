@@ -7,6 +7,9 @@ ip domain name local
 !
 username nic privilege 15 password 0 nic
 !
+interface Loopback0
+ ip address 172.16.0.1 255.255.255.255
+!
 interface GigabitEthernet0/0
  ip address 192.168.122.2 255.255.255.0
  no shut
